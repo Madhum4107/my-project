@@ -45,7 +45,7 @@ source .venv/bin/activate
 Install dependencies and run:
 
 ```bash
-python -m pip install psutil pandas scikit-learn matplotlib
+python -m pip install -r requirements.txt
 python cpu_memory_predictor.py
 ```
 
