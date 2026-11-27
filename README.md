@@ -1,67 +1,59 @@
-# CPU & Memory Usage Predictor
+# CPU & Memory Usage — Linear Trend Experiment
 
-A Python learning project that collects system resource usage, fits simple linear-regression models to the captured sample, and visualizes short-horizon CPU and memory trends.
+A beginner project that records CPU and memory usage for a short window and fits two simple linear-regression baselines to demonstrate model fitting and extrapolation.
 
-## Features
+> **Important limitation:** This is not a dependable forecasting or monitoring system. CPU and memory usage are time-varying, nonlinear and affected by workload. Extrapolating a short sample can be misleading. The chart is a learning visualization, not an operational alert.
 
-- Capture CPU utilization and memory utilization with `psutil`
-- Collect a short time-series sample
-- Fit separate Linear Regression models to CPU and memory readings
-- Predict the next 10 time steps (experimental)
-- Print threshold-based high-usage warnings
-- Plot observed and predicted values
+## Run
 
-## Workflow
-
-```text
-System metrics → Sample collection → DataFrame
-        → Linear Regression → Forecast → Plot & threshold warnings
-```
-
-## Tech stack
-
-Python · psutil · pandas · scikit-learn · matplotlib
-
-## Run locally
+Python 3.9+ recommended.
 
 ```bash
-git clone https://github.com/Madhum4107/my-project.git
-cd my-project
 python -m venv .venv
 ```
 
-Activate the environment:
-
-**Windows**
+Windows PowerShell:
 ```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
-**macOS / Linux**
-```bash
-source .venv/bin/activate
-```
-
-Install dependencies and run:
-
+Install:
 ```bash
 python -m pip install -r requirements.txt
+```
+
+Collect 20 readings (1 second apart), show 10 trend steps and plot:
+```bash
 python cpu_memory_predictor.py
 ```
 
-The script collects metrics for approximately 20 seconds before fitting its models.
+Options:
+```bash
+python cpu_memory_predictor.py --samples 30 --interval 0.5 --horizon 5 --threshold 75 --no-plot
+```
 
-## Notes & limitations
+## Code structure
 
-- This is an educational forecasting experiment, not a production system monitor.
-- The model is trained on a very short sample and uses time as its only feature; predictions may be unstable and should not be interpreted as reliable forecasts.
-- Threshold alerts are simple rules, not anomaly detection.
-- The script opens a Matplotlib plot after prediction.
+- `cpu_memory_predictor.py` — collection, validation, linear trend, threshold messages, plotting and CLI
+- `test_cpu_memory_predictor.py` — deterministic tests using synthetic measurements
 
-## Project report
+## Run tests
 
-[Read the project report (PDF)](The-Intelligent-System-CPU-and-Memory-Analysis-with-ML-Prediction.pdf)
+```bash
+python -m unittest discover -v
+```
+
+## Method
+
+Each metric is modeled independently against elapsed time. The predicted percentage is clipped to the valid 0–100 display range. Threshold messages describe the fitted trend, not a guaranteed future condition.
+
+## Future improvements
+
+- Compare against a persistence baseline and report MAE on a held-out time segment
+- Use longer windows and rolling features
+- Plot uncertainty and avoid extrapolating beyond a short horizon
+- Separate collection from model evaluation
 
 ## Author
 
-**Madhumitha M** · [GitHub](https://github.com/Madhum4107) · [LinkedIn](https://www.linkedin.com/in/madhumitha4107/)
+Madhumitha M · B.E. CSE (AI & ML), 2028
