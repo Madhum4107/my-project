@@ -19,7 +19,14 @@ class TrendBaselineTests(unittest.TestCase):
         for actual, expected in zip(result["cpu_percent"], [40, 50, 60]):
             self.assertAlmostEqual(actual, expected)
 
-    def test_future_timestamps_use_observed_cadence(self):\n        data = self.frame()\n        data["time_seconds"] = [0, 0.5, 1.0]\n        result = forecast_trend(data, 2)\n        self.assertAlmostEqual(result["time_seconds"].iloc[0], 1.5)\n        self.assertAlmostEqual(result["time_seconds"].iloc[1], 2.0)\n\n    def test_clips_percentages_to_valid_range(self):
+    def test_future_timestamps_use_observed_cadence(self):
+        data = self.frame()
+        data["time_seconds"] = [0, 0.5, 1.0]
+        result = forecast_trend(data, 2)
+        self.assertAlmostEqual(result["time_seconds"].iloc[0], 1.5)
+        self.assertAlmostEqual(result["time_seconds"].iloc[1], 2.0)
+
+    def test_clips_percentages_to_valid_range(self):
         data = self.frame()
         data["cpu_percent"] = [90, 100, 110]
         result = forecast_trend(data, 4)
