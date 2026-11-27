@@ -16,7 +16,7 @@ class TrendBaselineTests(unittest.TestCase):
         result = forecast_trend(self.frame(), 3)
         self.assertEqual(len(result), 3)
         self.assertEqual(list(result.columns), ["time_seconds", "cpu_percent", "memory_percent"])
-        self.assertEqual(result["cpu_percent"].tolist(), [40, 50, 60])
+        for actual, expected in zip(result["cpu_percent"], [40, 50, 60]):\n            self.assertAlmostEqual(actual, expected)
 
     def test_clips_percentages_to_valid_range(self):
         data = self.frame()
