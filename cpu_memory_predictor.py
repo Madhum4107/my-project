@@ -41,7 +41,9 @@ def forecast_trend(data: pd.DataFrame, horizon: int = 10) -> pd.DataFrame:
     if frame["time_seconds"].nunique() < 2:
         raise ValueError("time_seconds must contain at least two unique values")
     future = pd.DataFrame({
-        "time_seconds": [frame["time_seconds"].max() + i + 1 for i in range(horizon)]
+    cadence = frame["time_seconds"].diff().dropna().median()
+    cadence = float(cadence) if pd.notna(cadence) and cadence > 0 else 1.0
+        "time_seconds": [frame["time_seconds"].max() + cadence * (i + 1) for i in range(horizon)]
     })
     predictions = future.copy()
     for target in ["cpu_percent", "memory_percent"]:
