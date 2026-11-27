@@ -40,9 +40,9 @@ def forecast_trend(data: pd.DataFrame, horizon: int = 10) -> pd.DataFrame:
         raise ValueError("At least two complete observations are required")
     if frame["time_seconds"].nunique() < 2:
         raise ValueError("time_seconds must contain at least two unique values")
-    future = pd.DataFrame({
     cadence = frame["time_seconds"].diff().dropna().median()
     cadence = float(cadence) if pd.notna(cadence) and cadence > 0 else 1.0
+    future = pd.DataFrame({
         "time_seconds": [frame["time_seconds"].max() + cadence * (i + 1) for i in range(horizon)]
     })
     predictions = future.copy()
